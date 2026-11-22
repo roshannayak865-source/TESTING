@@ -2,21 +2,23 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                echo 'Building Application...'
+                git branch: 'main',
+                url: 'https://github.com/username/project.git'
             }
         }
 
-        stage('Test') {
+        stage('Build') {
             steps {
-                echo 'Running Tests...'
+                sh 'mvn clean package'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying Application...'
+                sh 'cp target/*.jar /opt/apps/'
+                sh 'systemctl restart myapp'
             }
         }
     }
